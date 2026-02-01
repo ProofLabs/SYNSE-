@@ -1,0 +1,11 @@
+README.md
+setup.py
+sysml_parser/__init__.py
+sysml_parser/models.py
+sysml_parser/parser.py
+sysml_parser/writer.py
+sysml_v2_parser.egg-info/PKG-INFO
+sysml_v2_parser.egg-info/SOURCES.txt
+sysml_v2_parser.egg-info/dependency_links.txt
+sysml_v2_parser.egg-info/top_level.txt
+tests/test_parser.py

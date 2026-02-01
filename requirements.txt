@@ -1,0 +1,15 @@
+# SysML v2 IDE - Core Dependencies
+
+# Web Framework - Interactive Author
+Flask==2.3.0
+Flask-CORS==4.0.0
+
+# Note: Core sysml_parser uses only Python standard library
+# Supported Python versions: 3.8+
+# Required standard library modules (included in Python):
+#   - json: Model serialization
+#   - xml.etree: XML parsing and writing
+#   - dataclasses: Core model definitions
+#   - abc: Abstract base classes
+#   - typing: Type hints
+#   - unittest: Testing framework
