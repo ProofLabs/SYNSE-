@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE: Data Models
+# SYNSE - SYstems eNgineering with SysML v2 Environment: Data Models
 # 
 # Author: Kishore Pochiraju
 # Developed with assistance from Claude Haiku 4.5

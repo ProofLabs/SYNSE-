@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE
+# SYNSE - SYstems eNgineering with SysML v2 Environment
 # 
 # A comprehensive Python toolkit for working with Systems Modeling Language v2
 # (SysML v2) models with interactive authoring, parsing, visualization, and

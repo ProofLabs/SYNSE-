@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE: Interactive Model Author
+# SYNSE - SYstems eNgineering with SysML v2 Environment: Interactive Model Author
 # 
 # Author: Kishore Pochiraju
 # Developed with assistance from Claude Haiku 4.5
@@ -1090,7 +1090,7 @@ class SysMLAuthor:
         self.current_model = Model(
             identifier='default_system',
             name='Example SysML Model',
-            author='Stevens SysML-IDE',
+            author='SYNSE - SYstems eNgineering with SysML v2 Environment',
             description='Default model demonstrating SysML v2 concepts',
             version='1.0'
         )

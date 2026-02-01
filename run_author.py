@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Stevens SysML-IDE Interactive Author - Usage Guide
+SYNSE - SYstems eNgineering with SysML v2 Environment - Interactive Author - Usage Guide
 
 The TLS/SSL errors you saw were from HTTPS attempts. The development 
 server uses HTTP by default, not HTTPS.
@@ -15,7 +15,7 @@ from sysml_parser.author import main
 
 print("""
 ╔════════════════════════════════════════════════════════════════╗
-║  Stevens SysML-IDE - Interactive Model Author                  ║
+║  SYNSE - SYstems eNgineering with SysML v2 Environment         ║
 ║                                                                 ║
 ║  📝 IMPORTANT: Use HTTP, not HTTPS                             ║
 ║                                                                 ║

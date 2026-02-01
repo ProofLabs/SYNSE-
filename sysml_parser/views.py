@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE: Visualization Views
+# SYNSE - SYstems eNgineering with SysML v2 Environment: Visualization Views
 # 
 # Author: Kishore Pochiraju
 # Developed with assistance from Claude Haiku 4.5

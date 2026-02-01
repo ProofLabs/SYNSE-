@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE: Parser Module
+# SYNSE - SYstems eNgineering with SysML v2 Environment: Parser Module
 # 
 # Author: Kishore Pochiraju
 # Developed with assistance from Claude Haiku 4.5

@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE: Parser Tests
+# SYNSE - SYstems eNgineering with SysML v2 Environment: Parser Tests
 # 
 # Author: Kishore Pochiraju
 # Developed with assistance from Claude Haiku 4.5

@@ -1,5 +1,5 @@
 ################################################################################
-# Stevens SysML-IDE: Example Model
+# SYNSE - SYstems eNgineering with SysML v2 Environment: Example Model
 # 
 # Author: Kishore Pochiraju
 # Developed with assistance from Claude Haiku 4.5
