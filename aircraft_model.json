@@ -1,0 +1,161 @@
+{
+  "identifier": "aircraft_system",
+  "name": "Aircraft Control System",
+  "documentation": "",
+  "visibility": "public",
+  "is_abstract": false,
+  "metadata": {},
+  "members": {},
+  "imported_namespaces": [],
+  "version": "1.0",
+  "owned_packages": {
+    "avionics": {
+      "identifier": "avionics",
+      "name": "Avionics",
+      "documentation": "",
+      "visibility": "public",
+      "is_abstract": false,
+      "metadata": {},
+      "members": {
+        "Autopilot": {
+          "identifier": "Autopilot",
+          "name": "Autopilot System",
+          "documentation": "Automated flight control",
+          "visibility": "public",
+          "is_abstract": false,
+          "metadata": {},
+          "supertypes": [],
+          "features": {
+            "altitude_in": {
+              "identifier": "altitude_in",
+              "name": "altitude_sensor",
+              "documentation": "",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "AltitudeSensor",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false,
+              "port_direction": "incoming",
+              "interfaces": []
+            },
+            "control_out": {
+              "identifier": "control_out",
+              "name": "control_surface",
+              "documentation": "",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "ControlActuator",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false,
+              "port_direction": "outgoing",
+              "interfaces": []
+            },
+            "cpu": {
+              "identifier": "cpu",
+              "name": "Flight Computer",
+              "documentation": "",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "Processor",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false,
+              "is_composite": true
+            }
+          },
+          "constraints": [],
+          "is_structure": false
+        },
+        "control_logic": {
+          "identifier": "control_logic",
+          "name": "Flight Control Logic",
+          "documentation": "Main autopilot control algorithm",
+          "visibility": "public",
+          "is_abstract": false,
+          "metadata": {},
+          "supertypes": [],
+          "features": {},
+          "constraints": [],
+          "input_features": {
+            "altitude": {
+              "identifier": "altitude",
+              "name": "altitude",
+              "documentation": "",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "Real",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false
+            }
+          },
+          "output_features": {
+            "elevator_cmd": {
+              "identifier": "elevator_cmd",
+              "name": "elevator_command",
+              "documentation": "",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "Real",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false
+            }
+          },
+          "behavior": ""
+        },
+        "REQ_001": {
+          "identifier": "REQ_001",
+          "name": "Altitude Control",
+          "documentation": "",
+          "visibility": "public",
+          "is_abstract": false,
+          "metadata": {},
+          "supertypes": [],
+          "features": {},
+          "constraints": [],
+          "requirement_id": "REQ-001",
+          "text": "The autopilot shall control altitude within \u00b1100 feet",
+          "derived_from": [],
+          "satisfied_by": [
+            "control_logic"
+          ]
+        },
+        "constraint_1": {
+          "identifier": "constraint_1",
+          "name": "Control Response Time",
+          "documentation": "",
+          "visibility": "public",
+          "is_abstract": false,
+          "metadata": {},
+          "expression": "response_time < 100ms",
+          "constrained_elements": [
+            "Autopilot"
+          ]
+        }
+      },
+      "imported_namespaces": [],
+      "version": "1.0",
+      "owned_packages": {}
+    }
+  },
+  "author": "Systems Engineer",
+  "description": "High-level aircraft control system"
+}

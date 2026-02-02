@@ -1,0 +1,69 @@
+{
+  "identifier": "automotive_system",
+  "name": "Automotive System",
+  "documentation": "",
+  "visibility": "public",
+  "is_abstract": false,
+  "metadata": {},
+  "members": {},
+  "imported_namespaces": [],
+  "version": "1.0",
+  "owned_packages": {
+    "powertrain_pkg": {
+      "identifier": "powertrain_pkg",
+      "name": "Powertrain Package",
+      "documentation": "",
+      "visibility": "public",
+      "is_abstract": false,
+      "metadata": {},
+      "members": {
+        "Engine": {
+          "identifier": "Engine",
+          "name": "Engine",
+          "documentation": "Internal combustion engine",
+          "visibility": "public",
+          "is_abstract": false,
+          "metadata": {},
+          "supertypes": [],
+          "features": {
+            "displacement": {
+              "identifier": "displacement",
+              "name": "displacement",
+              "documentation": "Engine displacement in cc",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "Real",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false
+            },
+            "power": {
+              "identifier": "power",
+              "name": "power",
+              "documentation": "Engine power in kW",
+              "visibility": "public",
+              "is_abstract": false,
+              "metadata": {},
+              "feature_type": "Real",
+              "multiplicity": "1",
+              "is_derived": false,
+              "default_value": null,
+              "owned_by": null,
+              "is_read_only": false
+            }
+          },
+          "constraints": [],
+          "is_structure": false
+        }
+      },
+      "imported_namespaces": [],
+      "version": "1.0",
+      "owned_packages": {}
+    }
+  },
+  "author": "Your Name",
+  "description": "A sample automotive system model"
+}

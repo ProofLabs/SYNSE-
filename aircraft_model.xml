@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SysMLModel id="aircraft_system" name="Aircraft Control System" version="2.0" author="Systems Engineer">
+  <description>Comprehensive aircraft control system with avionics, navigation, and propulsion subsystems</description>
+  
+  <!-- AVIONICS PACKAGE -->
+  <Package id="avionics" name="Avionics" version="2.0">
+    <documentation>Aircraft avionics and flight control systems</documentation>
+    
+    <!-- Autopilot System Class -->
+    <Class id="Autopilot" name="Autopilot System" visibility="public">
+      <documentation>Automated flight control with multi-mode support</documentation>
+      <!-- Attributes -->
+      <Attribute id="ap_mode" name="autopilot_mode" type="String" visibility="public">
+        <default_value>STANDBY</default_value>
+        <documentation>Current autopilot operating mode</documentation>
+      </Attribute>
+      <Attribute id="ap_status" name="system_status" type="String" visibility="public">
+        <default_value>HEALTHY</default_value>
+        <documentation>System health status</documentation>
+      </Attribute>
+      <Attribute id="ap_version" name="software_version" type="String" visibility="public">
+        <default_value>2.1.5</default_value>
+        <documentation>Autopilot software version</documentation>
+      </Attribute>
+      <!-- Sensor Inputs -->
+      <Feature id="altitude_in" name="altitude_sensor" visibility="public">
+        <type>AltitudeSensor</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>Barometric altitude measurement</documentation>
+      </Feature>
+      <Feature id="attitude_in" name="attitude_sensor" visibility="public">
+        <type>AttitudeSensor</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>Aircraft pitch, roll, yaw angles</documentation>
+      </Feature>
+      <Feature id="airspeed_in" name="airspeed_sensor" visibility="public">
+        <type>AirspeedSensor</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>True airspeed measurement</documentation>
+      </Feature>
+      <Feature id="gps_in" name="gps_receiver" visibility="public">
+        <type>GPSReceiver</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>Global positioning system receiver</documentation>
+      </Feature>
+      <!-- Control Outputs -->
+      <Feature id="control_elevator" name="elevator_control" visibility="public">
+        <type>ControlActuator</type>
+        <multiplicity>1..2</multiplicity>
+        <documentation>Pitch control actuators</documentation>
+      </Feature>
+      <Feature id="control_aileron" name="aileron_control" visibility="public">
+        <type>ControlActuator</type>
+        <multiplicity>1..2</multiplicity>
+        <documentation>Roll control actuators</documentation>
+      </Feature>
+      <Feature id="control_rudder" name="rudder_control" visibility="public">
+        <type>ControlActuator</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>Yaw control actuator</documentation>
+      </Feature>
+      <!-- Internal Components -->
+      <Feature id="cpu" name="Flight Computer" visibility="public">
+        <type>Processor</type>
+        <multiplicity>2..2</multiplicity>
+        <documentation>Dual redundant flight control computers</documentation>
+      </Feature>
+      <Feature id="imu" name="Inertial Measurement Unit" visibility="public">
+        <type>IMU</type>
+        <multiplicity>2..2</multiplicity>
+        <documentation>Dual redundant inertial measurement</documentation>
+      </Feature>
+      <Feature id="power_supply" name="Power Supply" visibility="public">
+        <type>PowerSupply</type>
+        <multiplicity>2..2</multiplicity>
+        <documentation>Redundant power distribution</documentation>
+      </Feature>
+      <!-- Ports for system communication -->
+      <Port id="ap_sensor_port" name="sensor_data_in" direction="in" type="SensorInterface" />
+      <Port id="ap_control_port" name="control_out" direction="out" type="ControlInterface" />
+      <Port id="ap_mode_port" name="mode_select" direction="in" type="ModeSelection" />
+    </Class>
+    
+    <!-- Flight Management System Class -->
+    <Class id="FlightMgmt" name="Flight Management System" visibility="public">
+      <documentation>Advanced flight planning and route management</documentation>
+      <!-- Attributes -->
+      <Attribute id="fms_version" name="system_version" type="String" visibility="public">
+        <default_value>1.8.3</default_value>
+      </Attribute>
+      <Attribute id="fms_data_age" name="data_age_minutes" type="Integer" visibility="public">
+        <default_value>0</default_value>
+        <documentation>Age of navigation database in minutes</documentation>
+      </Attribute>
+      <Attribute id="fms_active_plan" name="active_flight_plan" type="String" visibility="public">
+        <documentation>Identifier of active flight plan</documentation>
+      </Attribute>
+      <Feature id="fms_processor" name="FMS Processor" visibility="public">
+        <type>Processor</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="database" name="Navigation Database" visibility="public">
+        <type>DataStore</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>Waypoints, airways, and procedure data</documentation>
+      </Feature>
+      <Feature id="display" name="Display Unit" visibility="public">
+        <type>DisplayDevice</type>
+        <multiplicity>1..3</multiplicity>
+        <documentation>Pilot information displays</documentation>
+      </Feature>
+      <!-- Ports -->
+      <Port id="fms_input_port" name="flightplan_input" direction="in" type="FlightPlanData" />
+      <Port id="fms_output_port" name="nav_output" direction="out" type="NavigationData" />
+    </Class>
+    
+    <!-- Flight Control Logic Function -->
+    <Function id="control_logic" name="Flight Control Logic" visibility="public">
+      <documentation>Main autopilot control algorithm with stability augmentation</documentation>
+      <Input id="ctrl_altitude" name="target_altitude" type="Real" />
+      <Input id="ctrl_heading" name="target_heading" type="Real" />
+      <Input id="ctrl_speed" name="target_speed" type="Real" />
+      <Output id="ctrl_elevator_out" name="elevator_command" type="Real" />
+      <Output id="ctrl_aileron_out" name="aileron_command" type="Real" />
+      <Output id="ctrl_rudder_out" name="rudder_command" type="Real" />
+      <!-- Example Ports -->
+      <Port id="ctrl_port_in" name="control_inputs" direction="in" type="ControlSignal" />
+      <Port id="ctrl_port_out" name="control_outputs" direction="out" type="ControlCommand" />
+    </Function>
+    
+    <!-- Navigation Function -->
+    <Function id="nav_logic" name="Navigation Processing" visibility="public">
+      <documentation>GPS and inertial navigation integration</documentation>
+      <Input id="nav_gps" name="gps_position" type="Position" />
+      <Input id="nav_inertial" name="inertial_position" type="Position" />
+      <Output id="nav_position" name="current_position" type="Position" />
+      <Output id="nav_error" name="position_error" type="Real" />
+    </Function>
+    
+    <!-- Mode Management Function -->
+    <Function id="mode_logic" name="Mode Management" visibility="public">
+      <documentation>Autopilot mode selection and transitions</documentation>
+      <Input id="mode_cmd" name="mode_command" type="AutopilotMode" />
+      <Output id="mode_active" name="active_mode" type="AutopilotMode" />
+      <Output id="mode_status" name="mode_status" type="String" />
+    </Function>
+    
+    <!-- Requirements -->
+    <Requirement req_id="REQ-001" id="REQ_001" name="Altitude Hold" visibility="public">
+      <text>System shall maintain target altitude within ±100 feet in autopilot mode</text>
+      <satisfied_by>control_logic</satisfied_by>
+    </Requirement>
+    <Requirement req_id="REQ-002" id="REQ_002" name="Heading Control" visibility="public">
+      <text>System shall maintain target heading within ±2 degrees in navigation mode</text>
+      <satisfied_by>control_logic,nav_logic</satisfied_by>
+    </Requirement>
+    <Requirement req_id="REQ-003" id="REQ_003" name="Navigation Accuracy" visibility="public">
+      <text>Navigation system shall provide position accuracy of ±100 meters</text>
+      <satisfied_by>nav_logic</satisfied_by>
+    </Requirement>
+    <Requirement req_id="REQ-004" id="REQ_004" name="Mode Transition Safety" visibility="public">
+      <text>All autopilot mode transitions shall be smooth and monitored</text>
+      <satisfied_by>mode_logic</satisfied_by>
+    </Requirement>
+    
+    <!-- Example Association: Autopilot depends on Sensors -->
+    <Association id="assoc_ap_sensors" name="Uses Sensors" visibility="public">
+      <source id="Autopilot" name="Autopilot" multiplicity="1..1" />
+      <target id="altitude_in" name="AltitudeSensor" multiplicity="1..1" />
+      <documentation>Autopilot system uses altitude sensor for measurements</documentation>
+    </Association>
+    
+    <!-- Example Association: Flight Control Logic realizes Requirements -->
+    <Association id="assoc_control_logic_req" name="Realizes Requirements" visibility="public">
+      <source id="control_logic" name="Control Logic Function" multiplicity="1..1" />
+      <target id="REQ_001" name="Altitude Hold Requirement" multiplicity="1..1" />
+      <type>realizes</type>
+      <documentation>Flight control logic function implements altitude hold requirement</documentation>
+    </Association>
+    <!-- Constraints -->
+    <Constraint id="constraint_response_time" name="Control Response Time" visibility="public">
+      <expression>response_time &amp;lt; 100ms</expression>
+      <constrained_elements>control_logic,Autopilot</constrained_elements>
+    </Constraint>
+    <Constraint id="constraint_reliability" name="System Reliability" visibility="public">
+      <expression>mtbf &amp;gt; 10000 hours</expression>
+      <constrained_elements>Autopilot,FlightMgmt</constrained_elements>
+    </Constraint>
+    <Constraint id="constraint_redundancy" name="Redundancy Requirement" visibility="public">
+      <expression>critical_components &gt;= 2</expression>
+      <constrained_elements>Autopilot</constrained_elements>
+    </Constraint>
+  </Package>
+  
+  <!-- PROPULSION PACKAGE -->
+  <Package id="propulsion" name="Propulsion" version="1.0">
+    <documentation>Engine and fuel management systems</documentation>
+    
+    <Class id="Engine" name="Turbofan Engine" visibility="public">
+      <documentation>Primary aircraft propulsion unit</documentation>
+      <!-- Attributes -->
+      <Attribute id="eng_max_thrust" name="max_thrust_lbf" type="Real" visibility="public">
+        <default_value>100000.0</default_value>
+        <documentation>Maximum thrust in pounds-force</documentation>
+      </Attribute>
+      <Attribute id="eng_max_rpm" name="max_rpm" type="Real" visibility="public">
+        <default_value>31000.0</default_value>
+        <documentation>Maximum RPM rating</documentation>
+      </Attribute>
+      <Attribute id="eng_status" name="operational_status" type="String" visibility="public">
+        <default_value>HEALTHY</default_value>
+        <documentation>Current engine status (HEALTHY, DEGRADED, FAILED)</documentation>
+      </Attribute>
+      <!-- Parts -->
+      <Part id="eng_core" name="Engine Core" type="Compressor" multiplicity="1..1">
+        <documentation>High-pressure compression section</documentation>
+      </Part>
+      <Part id="eng_combustor" name="Combustor" type="CombustionChamber" multiplicity="1..1">
+        <documentation>Fuel combustion chamber</documentation>
+      </Part>
+      <Part id="eng_turbine" name="Turbine Section" type="Turbine" multiplicity="1..1">
+        <documentation>High-pressure turbine section</documentation>
+      </Part>
+      <Feature id="engine_throttle" name="throttle_input" visibility="public">
+        <type>ControlInput</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="engine_rpm" name="engine_rpm" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="engine_thrust" name="thrust_output" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="ecu" name="Engine Control Unit" visibility="public">
+        <type>Processor</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <!-- Ports -->
+      <Port id="eng_control_port" name="control_input" direction="in" type="ThrottleCommand" />
+      <Port id="eng_data_port" name="telemetry_output" direction="out" type="EngineData" />
+    </Class>
+    
+    <Class id="FuelSystem" name="Fuel Management System" visibility="public">
+      <documentation>Fuel storage and distribution</documentation>
+      <!-- Attributes -->
+      <Attribute id="fuel_total_capacity" name="total_capacity_gallons" type="Real" visibility="public">
+        <default_value>50000.0</default_value>
+        <documentation>Total fuel capacity in gallons</documentation>
+      </Attribute>
+      <Attribute id="fuel_current_load" name="current_fuel_load" type="Real" visibility="public">
+        <default_value>50000.0</default_value>
+        <documentation>Current fuel quantity in gallons</documentation>
+      </Attribute>
+      <Attribute id="fuel_min_reserve" name="minimum_reserve" type="Real" visibility="public">
+        <default_value>5000.0</default_value>
+        <documentation>Minimum fuel reserve required</documentation>
+      </Attribute>
+      <!-- Parts -->
+      <Part id="fuel_tank1_part" name="Main Tank 1" type="FuelTank" multiplicity="1..1">
+        <documentation>Primary fuel storage tank left wing</documentation>
+      </Part>
+      <Part id="fuel_tank2_part" name="Main Tank 2" type="FuelTank" multiplicity="1..1">
+        <documentation>Primary fuel storage tank right wing</documentation>
+      </Part>
+      <Feature id="fuel_tank1" name="Main Tank 1" visibility="public">
+        <type>Tank</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="fuel_tank2" name="Main Tank 2" visibility="public">
+        <type>Tank</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="fuel_pump" name="Fuel Pump" visibility="public">
+        <type>Pump</type>
+        <multiplicity>2..2</multiplicity>
+        <documentation>Redundant fuel pumps</documentation>
+      </Feature>
+      <Feature id="fuel_level" name="Fuel Level Indicator" visibility="public">
+        <type>Sensor</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <!-- Ports -->
+      <Port id="fuel_supply_port" name="fuel_supply" direction="out" type="FuelFlow" />
+      <Port id="fuel_sensor_port" name="level_data" direction="out" type="FuelLevelData" />
+    </Class>
+    
+    <Function id="engine_control" name="Engine Control" visibility="public">
+      <documentation>Engine performance management and protection</documentation>
+      <Input id="ec_throttle" name="throttle_command" type="Real" />
+      <Input id="ec_speed" name="current_speed" type="Real" />
+      <Output id="ec_rpm" name="rpm_command" type="Real" />
+      <Output id="ec_temp" name="temperature_warning" type="Boolean" />
+    </Function>
+    
+    <Function id="fuel_control" name="Fuel Management" visibility="public">
+      <documentation>Optimal fuel distribution and monitoring</documentation>
+      <Input id="fc_demand" name="fuel_demand" type="Real" />
+      <Input id="fc_level" name="fuel_level_status" type="Real" />
+      <Output id="fc_pump_cmd" name="pump_command" type="Boolean" />
+      <Output id="fc_valve_cmd" name="valve_position" type="Real" />
+    </Function>
+    
+    <!-- Example Association: Fuel System provides fuel to Engines -->
+    <Association id="assoc_fuel_engine" name="Supplies Fuel" visibility="public">
+      <source id="FuelSystem" name="Fuel System" multiplicity="1..1" />
+      <target id="Engine" name="Engine" multiplicity="2..4" />
+      <type>supplies</type>
+      <documentation>Fuel system supplies fuel to multiple engines</documentation>
+    </Association>
+    
+    <!-- Example Association: Engine Control Function controls Engine -->
+    <Association id="assoc_engine_ctrl" name="Controls Engine" visibility="public">
+      <source id="engine_control" name="Engine Control Function" multiplicity="1..1" />
+      <target id="Engine" name="Engine" multiplicity="1..1" />
+      <type>controls</type>
+      <documentation>Engine control function manages engine operation</documentation>
+    </Association>
+    <Requirement req_id="REQ-005" id="REQ_005" name="Maximum Thrust" visibility="public">
+      <text>Engine shall provide maximum thrust of 100,000 lbf per engine</text>
+      <satisfied_by>engine_control</satisfied_by>
+    </Requirement>
+    <Requirement req_id="REQ-006" id="REQ_006" name="Fuel Efficiency" visibility="public">
+      <text>Fuel consumption shall not exceed 2.5 gallons per minute at cruise</text>
+      <satisfied_by>fuel_control</satisfied_by>
+    </Requirement>
+  </Package>
+  
+  <!-- STRUCTURAL PACKAGE -->
+  <Package id="structure" name="Airframe Structure" version="1.0">
+    <documentation>Aircraft structural components and analysis</documentation>
+    
+    <Class id="Wing" name="Wing" visibility="public">
+      <documentation>Aircraft wing structure with control surfaces</documentation>
+      <!-- Attributes -->
+      <Attribute id="wing_span" name="wing_span_feet" type="Real" visibility="public">
+        <default_value>209.0</default_value>
+        <documentation>Wing span in feet</documentation>
+      </Attribute>
+      <Attribute id="wing_area" name="wing_area" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+        <documentation>Wing planform area in square feet</documentation>
+      </Attribute>
+      <Attribute id="wing_weight" name="structural_weight_lbs" type="Real" visibility="public">
+        <default_value>225000.0</default_value>
+        <documentation>Wing structural weight in pounds</documentation>
+      </Attribute>
+      <!-- Parts - Control Surfaces -->
+      <Part id="wing_aileron_left" name="Left Aileron" type="ControlSurface" multiplicity="1..1">
+        <documentation>Left wing roll control surface</documentation>
+      </Part>
+      <Part id="wing_aileron_right" name="Right Aileron" type="ControlSurface" multiplicity="1..1">
+        <documentation>Right wing roll control surface</documentation>
+      </Part>
+      <Part id="wing_slat_left" name="Left Slat" type="ControlSurface" multiplicity="1..1">
+        <documentation>Left wing leading edge device</documentation>
+      </Part>
+      <Part id="wing_slat_right" name="Right Slat" type="ControlSurface" multiplicity="1..1">
+        <documentation>Right wing leading edge device</documentation>
+      </Part>
+      <Part id="wing_flap_left" name="Left Flap" type="ControlSurface" multiplicity="1..1">
+        <documentation>Left wing trailing edge device</documentation>
+      </Part>
+      <Part id="wing_flap_right" name="Right Flap" type="ControlSurface" multiplicity="1..1">
+        <documentation>Right wing trailing edge device</documentation>
+      </Part>
+      <Feature id="aileron" name="Aileron" visibility="public">
+        <type>ControlSurface</type>
+        <multiplicity>2..2</multiplicity>
+      </Feature>
+      <Feature id="slat" name="Slat" visibility="public">
+        <type>ControlSurface</type>
+        <multiplicity>2..2</multiplicity>
+      </Feature>
+      <Feature id="flap" name="Flap" visibility="public">
+        <type>ControlSurface</type>
+        <multiplicity>2..2</multiplicity>
+      </Feature>
+      <!-- Ports -->
+      <Port id="wing_control_port" name="control_surface_input" direction="in" type="ControlCommand" />
+    </Class>
+    
+    <Class id="Fuselage" name="Fuselage" visibility="public">
+      <documentation>Main aircraft fuselage</documentation>
+      <!-- Attributes -->
+      <Attribute id="fuselage_length" name="fuselage_length" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+        <default_value>230.0</default_value>
+        <documentation>Fuselage length in feet</documentation>
+      </Attribute>
+      <Feature id="length" name="fuselage_length" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="cabin_volume" name="cabin_volume" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <!-- Ports -->
+      <Port id="fuselage_cargo_port" name="cargo_access" direction="in" type="CargoInterface" />
+    </Class>
+    
+    <Class id="VerticalStabilizer" name="Vertical Stabilizer" visibility="public">
+      <documentation>Vertical tail structure</documentation>
+      <!-- Attributes -->
+      <Attribute id="vs_area" name="vertical_surface_area" type="Real" visibility="public">
+        <default_value>5500.0</default_value>
+        <documentation>Vertical stabilizer area in square feet</documentation>
+      </Attribute>
+      <!-- Parts -->
+      <Part id="vs_rudder_part" name="Rudder" type="ControlSurface" multiplicity="1..1">
+        <documentation>Vertical stabilizer yaw control surface</documentation>
+      </Part>
+      <Feature id="rudder" name="Rudder" visibility="public">
+        <type>ControlSurface</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <!-- Ports -->
+      <Port id="vs_control_port" name="control_input" direction="in" type="ControlCommand" />
+    </Class>
+    
+    <Class id="HorizontalStabilizer" name="Horizontal Stabilizer" visibility="public">
+      <documentation>Horizontal tail structure</documentation>
+      <!-- Attributes -->
+      <Attribute id="hs_area" name="horizontal_surface_area" type="Real" visibility="public">
+        <default_value>5000.0</default_value>
+        <documentation>Horizontal stabilizer area in square feet</documentation>
+      </Attribute>
+      <!-- Parts -->
+      <Part id="hs_elevator_left" name="Left Elevator" type="ControlSurface" multiplicity="1..1">
+        <documentation>Left horizontal stabilizer pitch control surface</documentation>
+      </Part>
+      <Part id="hs_elevator_right" name="Right Elevator" type="ControlSurface" multiplicity="1..1">
+        <documentation>Right horizontal stabilizer pitch control surface</documentation>
+      </Part>
+      <Feature id="elevator" name="Elevator" visibility="public">
+        <type>ControlSurface</type>
+        <multiplicity>2..2</multiplicity>
+      </Feature>
+      <!-- Ports -->
+      <Port id="hs_control_port" name="control_input" direction="in" type="ControlCommand" />
+    </Class>
+    
+    <!-- Example Association: Structural components support aircraft -->
+    <Association id="assoc_structure_support" name="Supports Aircraft" visibility="public">
+      <source id="Wing" name="Wing" multiplicity="2..2" />
+      <target id="Fuselage" name="Fuselage" multiplicity="1..1" />
+      <type>supports</type>
+      <documentation>Wing structures support the fuselage</documentation>
+    </Association>
+    
+    <!-- Example Association: Stabilizers maintain trim -->
+    <Association id="assoc_stab_trim" name="Maintains Trim" visibility="public">
+      <source id="VerticalStabilizer" name="Vertical Stabilizer" multiplicity="1..1" />
+      <source id="HorizontalStabilizer" name="Horizontal Stabilizer" multiplicity="1..1" />
+      <target id="Fuselage" name="Fuselage" multiplicity="1..1" />
+      <type>stabilizes</type>
+      <documentation>Stabilizers maintain aircraft trim and stability</documentation>
+    </Association>
+    
+    <Requirement req_id="REQ-007" id="REQ_007" name="Structural Integrity" visibility="public">
+      <text>All structural components shall withstand 1.5g ultimate load factor</text>
+      <satisfied_by>Wing,Fuselage,VerticalStabilizer,HorizontalStabilizer</satisfied_by>
+    </Requirement>
+  </Package>
+  
+  <!-- POWER AND ELECTRICAL PACKAGE -->
+  <Package id="electrical" name="Power and Electrical" version="1.0">
+    <documentation>Electrical power generation and distribution</documentation>
+    
+    <Class id="Generator" name="Electrical Generator" visibility="public">
+      <documentation>Engine-driven electrical generator</documentation>
+      <!-- Attributes -->
+      <Attribute id="gen_rating" name="power_rating" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+        <default_value>150.0</default_value>
+        <documentation>Power rating in kVA</documentation>
+      </Attribute>
+      <Attribute id="gen_frequency" name="frequency" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+        <default_value>400.0</default_value>
+        <documentation>AC frequency in Hz</documentation>
+      </Attribute>
+      <Attribute id="gen_voltage" name="output_voltage" type="Real" visibility="public">
+        <default_value>115.0</default_value>
+        <documentation>Output voltage in volts</documentation>
+      </Attribute>
+      <!-- Ports -->
+      <Port id="gen_prime_port" name="prime_mover_input" direction="in" type="MechanicalPower" />
+      <Port id="gen_power_port" name="electrical_output" direction="out" type="ElectricalPower" />
+    </Class>
+    
+    <Class id="Battery" name="Main Battery" visibility="public">
+      <documentation>Aircraft battery system</documentation>
+      <!-- Attributes -->
+      <Attribute id="bat_voltage" name="nominal_voltage" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+        <default_value>28.0</default_value>
+        <documentation>Nominal voltage in volts</documentation>
+      </Attribute>
+      <Attribute id="bat_capacity" name="capacity" visibility="public">
+        <type>Real</type>
+        <multiplicity>1..1</multiplicity>
+        <default_value>400.0</default_value>
+        <documentation>Battery capacity in Amp-hours</documentation>
+      </Attribute>
+      <Attribute id="bat_state" name="charge_state" type="String" visibility="public">
+        <default_value>FULL</default_value>
+        <documentation>Battery charge state (FULL, PARTIAL, LOW, CRITICAL)</documentation>
+      </Attribute>
+      <!-- Ports -->
+      <Port id="bat_output_port" name="power_output" direction="out" type="ElectricalPower" />
+      <Port id="bat_charge_port" name="charge_input" direction="in" type="ChargingPower" />
+    </Class>
+    
+    <!-- Example Association: Generators power Battery -->
+    <Association id="assoc_gen_bat" name="Charges Battery" visibility="public">
+      <source id="Generator" name="Generator" multiplicity="2..2" />
+      <target id="Battery" name="Battery" multiplicity="1..1" />
+      <type>charges</type>
+      <documentation>Generators charge main battery during flight</documentation>
+    </Association>
+    
+    <Function id="power_mgmt" name="Power Management" visibility="public">
+      <documentation>Electrical power distribution and load shedding</documentation>
+      <Input id="pm_demand" name="power_demand" type="Real" />
+      <Input id="pm_available" name="available_power" type="Real" />
+      <Output id="pm_load_shed" name="load_shedding_command" type="Boolean" />
+      <!-- Ports -->
+      <Port id="pm_in_port" name="power_availability_input" direction="in" type="PowerBusData" />
+      <Port id="pm_out_port" name="distribution_commands" direction="out" type="LoadShedCommand" />
+    </Function>
+    
+    <Requirement req_id="REQ-008" id="REQ_008" name="Power Reliability" visibility="public">
+      <text>Electrical system shall support redundant power for critical systems</text>
+      <satisfied_by>Generator,Battery,power_mgmt</satisfied_by>
+    </Requirement>
+    
+    <!-- Additional Constraints for electrical system -->
+    <Constraint id="constraint_voltage_regulation" name="Voltage Regulation" visibility="public">
+      <expression>output_voltage &amp;gt;= 110V AND output_voltage &amp;lt;= 120V</expression>
+      <constrained_elements>Generator</constrained_elements>
+    </Constraint>
+    <Constraint id="constraint_frequency" name="Frequency Stability" visibility="public">
+      <expression>frequency &amp;gt;= 390Hz AND frequency &amp;lt;= 410Hz</expression>
+      <constrained_elements>Generator</constrained_elements>
+    </Constraint>
+  </Package>
+  
+  <!-- SYSTEM-LEVEL INTERFACES -->
+  <Package id="interfaces" name="System Interfaces" version="1.0">
+    <documentation>High-level system integration and interfaces</documentation>
+    
+    <Class id="AircraftSystem" name="Aircraft System" visibility="public">
+      <documentation>Top-level aircraft system integrating all subsystems</documentation>
+      <!-- System-level Attributes -->
+      <Attribute id="ac_model" name="aircraft_model" type="String" visibility="public">
+        <default_value>Next-Gen Transport Aircraft</default_value>
+        <documentation>Aircraft type/model identifier</documentation>
+      </Attribute>
+      <Attribute id="ac_status" name="system_status" type="String" visibility="public">
+        <default_value>GROUND</default_value>
+        <documentation>Current system operational state</documentation>
+      </Attribute>
+      <Attribute id="ac_mission_time" name="total_flight_hours" type="Real" visibility="public">
+        <default_value>0.0</default_value>
+        <documentation>Cumulative flight hours</documentation>
+      </Attribute>
+      <!-- Major Subsystems as Parts -->
+      <Part id="ac_avionics_part" name="Avionics Subsystem" type="AutopilotSystem" multiplicity="1..1">
+        <documentation>Flight control and navigation subsystem</documentation>
+      </Part>
+      <Part id="ac_engine1" name="Engine 1" type="TurbofanEngine" multiplicity="1..1">
+        <documentation>Left engine</documentation>
+      </Part>
+      <Part id="ac_engine2" name="Engine 2" type="TurbofanEngine" multiplicity="1..1">
+        <documentation>Right engine</documentation>
+      </Part>
+      <Part id="ac_wings" name="Wing Assembly" type="Wing" multiplicity="1..1">
+        <documentation>Main lifting surfaces</documentation>
+      </Part>
+      <Part id="ac_fuselage_part" name="Fuselage Assembly" type="Fuselage" multiplicity="1..1">
+        <documentation>Main fuselage structure</documentation>
+      </Part>
+      <Feature id="sys_autopilot" name="autopilot_subsystem" visibility="public">
+        <type>Autopilot</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="sys_propulsion" name="propulsion_subsystem" visibility="public">
+        <type>Engine</type>
+        <multiplicity>2..4</multiplicity>
+      </Feature>
+      <Feature id="sys_fuel" name="fuel_subsystem" visibility="public">
+        <type>FuelSystem</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="sys_structure" name="airframe" visibility="public">
+        <type>Wing</type>
+        <multiplicity>1..1</multiplicity>
+      </Feature>
+      <Feature id="sys_electrical" name="electrical_system" visibility="public">
+        <type>Generator</type>
+        <multiplicity>2..2</multiplicity>
+      </Feature>
+      <!-- System-level Ports -->
+      <Port id="ac_nav_input" name="navigation_input" direction="in" type="NavigationCommand" />
+      <Port id="ac_control_input" name="pilot_control" direction="in" type="FlightControls" />
+      <Port id="ac_telemetry" name="telemetry_output" direction="out" type="SystemTelemetry" />
+    </Class>
+    
+    <!-- Example Association: System integrates all subsystems -->
+    <Association id="assoc_system_integration" name="Integrates Subsystems" visibility="public">
+      <source id="AircraftSystem" name="Aircraft System" multiplicity="1..1" />
+      <target id="Autopilot" name="Avionics Subsystem" multiplicity="1..1" />
+      <target id="Engine" name="Propulsion Subsystem" multiplicity="2..4" />
+      <target id="FuelSystem" name="Fuel Subsystem" multiplicity="1..1" />
+      <target id="Generator" name="Electrical Subsystem" multiplicity="2..2" />
+      <type>integrates</type>
+      <documentation>Aircraft system integrates all major subsystems into one vehicle</documentation>
+    </Association>
+    
+    <Requirement req_id="REQ-009" id="REQ_009" name="Overall System Safety" visibility="public">
+      <text>Aircraft shall meet certification level DAL A (Most Stringent) for critical functions</text>
+      <satisfied_by>AircraftSystem</satisfied_by>
+    </Requirement>
+    <Requirement req_id="REQ-010" id="REQ_010" name="System Integration" visibility="public">
+      <text>All subsystems shall integrate seamlessly with common avionics architecture</text>
+      <satisfied_by>AircraftSystem</satisfied_by>
+    </Requirement>
+  </Package>
+</SysMLModel>
